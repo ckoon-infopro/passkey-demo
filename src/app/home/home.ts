@@ -10,12 +10,10 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrl: './home.css'
 })
 export class Home implements OnInit {
-  username: string | null = '';
 
   constructor(private route: ActivatedRoute, private router: Router) {}
 
   ngOnInit(): void {
-    this.username = this.route.snapshot.paramMap.get('username');
   }
 
   logout() {

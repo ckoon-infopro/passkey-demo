@@ -107,15 +107,7 @@ export class WebAuthnService {
       // In a real app, the backend would look up the user by authResp.rawId
       // and then verify the signature. For the POC, we'll just log the userHandle.
       console.log('UserHandle from authenticator:', authResp.response.userHandle);
-      let username: string = 'unknown user';
-      if (authResp.response.userHandle) {
-        try {
-          username = new TextDecoder().decode(this.base64UrlToUint8Array(authResp.response.userHandle));
-        } catch (e) {
-          console.warn('Could not decode userHandle:', e);
-        }
-      }
-      const verificationResult = { verified: true, username: username };
+      const verificationResult = { verified: true, username: 'authenticated_user' };
       // End of mocked verification
 
       if (verificationResult.verified) {

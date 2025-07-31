@@ -31,7 +31,7 @@ export class Login {
   async login() {
     try {
       const verificationResult = await this.webAuthnService.authenticatePasskey();
-      this.router.navigate(['/home', verificationResult.username]);
+      this.router.navigate(['/home']);
     } catch (error) {
       console.error('Authentication failed', error);
     }
