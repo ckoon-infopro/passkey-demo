@@ -1,25 +1,39 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { WebAuthnService } from '../webauthn.service';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './login.html',
   styleUrl: './login.css'
 })
 export class Login {
-  constructor(private router: Router) {}
+  username: string = '';
 
-  signup() {
-    console.log('Sign Up button clicked');
-    // Implement passkey registration logic here
+  constructor(private router: Router, private webAuthnService: WebAuthnService) {}
+
+  async signup() {
+    if (!this.username) {
+      alert('Please enter a username.');
+      return;
+    }
+    try {
+      await this.webAuthnService.registerPasskey(this.username);
+    } catch (error) {
+      console.error('Registration failed', error);
+    }
   }
 
-  login() {
-    console.log('Login button clicked');
-    // Implement passkey authentication logic here
-    this.router.navigate(['/home']); // Navigate to home after successful login (for now)
+  async login() {
+    try {
+      const verificationResult = await this.webAuthnService.authenticatePasskey();
+      this.router.navigate(['/home', verificationResult.username]);
+    } catch (error) {
+      console.error('Authentication failed', error);
+    }
   }
 }

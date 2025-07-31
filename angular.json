@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "angular-20": {
+    "passkey-demo": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -53,10 +53,10 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "angular-20:build:production"
+              "buildTarget": "passkey-demo:build:production"
             },
             "development": {
-              "buildTarget": "angular-20:build:development"
+              "buildTarget": "passkey-demo:build:development"
             }
           },
           "defaultConfiguration": "development"
