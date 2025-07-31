@@ -20,17 +20,36 @@ export class WebAuthnService {
 
   constructor(private http: HttpClient) {}
 
+  private uint8ArrayToBase64Url(uint8Array: Uint8Array): string {
+    return btoa(String.fromCharCode(...uint8Array))
+      .replace(/\+/g, '-')
+      .replace(/\//g, '_')
+      .replace(/=/g, '');
+  }
+
+  private base64UrlToUint8Array(base64Url: string): Uint8Array {
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    const pad = base64.length % 4;
+    const padded = pad ? base64 + '===='.slice(0, 4 - pad) : base64;
+    const binary = atob(padded);
+    const bytes = new Uint8Array(binary.length);
+    for (let i = 0; i < binary.length; i++) {
+      bytes[i] = binary.charCodeAt(i);
+    }
+    return bytes;
+  }
+
   async registerPasskey(username: string): Promise<any> {
     try {
       // 1. Get registration options from your backend (MOCKED FOR POC)
       const options: PublicKeyCredentialCreationOptionsJSON = {
-        challenge: btoa(String.fromCharCode(...crypto.getRandomValues(new Uint8Array(32)))),
+        challenge: this.uint8ArrayToBase64Url(crypto.getRandomValues(new Uint8Array(32))),
         rp: {
           name: 'Gemini Passkey Demo',
           id: window.location.hostname,
         },
         user: {
-          id: btoa(username),
+          id: this.uint8ArrayToBase64Url(new TextEncoder().encode(username)),
           name: username,
           displayName: username,
         },
@@ -73,7 +92,7 @@ export class WebAuthnService {
     try {
       // 1. Get authentication options from your backend (MOCKED FOR POC)
       const options: PublicKeyCredentialRequestOptionsJSON = {
-        challenge: btoa(String.fromCharCode(...crypto.getRandomValues(new Uint8Array(32)))),
+        challenge: this.uint8ArrayToBase64Url(crypto.getRandomValues(new Uint8Array(32))),
         rpId: window.location.hostname,
         userVerification: 'preferred',
         timeout: 60000,
@@ -86,13 +105,17 @@ export class WebAuthnService {
       // 3. Send authentication response to your backend for verification (MOCKED FOR POC)
       console.log('Mock Authentication Response (would be sent to backend):', authResp);
       // In a real app, the backend would look up the user by authResp.rawId
-      // and then verify the signature. For the POC, we'll decode the userHandle.
-      const username = atob(authResp.response.userHandle!);
-      const verificationResult = { verified: true, username };
+      // and then verify the signature. For the POC, we'll just log the userHandle.
+      console.log('UserHandle from authenticator:', authResp.response.userHandle);
+      if (!authResp.response.userHandle) {
+        throw new Error('User handle is missing from authentication response.');
+      }
+      const username = new TextDecoder().decode(this.base64UrlToUint8Array(authResp.response.userHandle));
+      const verificationResult = { verified: true, username: username };
       // End of mocked verification
 
       if (verificationResult.verified) {
-        console.log(`Passkey authenticated successfully for ${username}! (mocked)`);
+        console.log(`Passkey authenticated successfully for ${verificationResult.username}! (mocked)`);
         return verificationResult;
       } else {
         console.error('Passkey authentication failed (mocked):', verificationResult);
