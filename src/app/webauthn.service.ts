@@ -93,7 +93,6 @@ export class WebAuthnService {
       // 1. Get authentication options from your backend (MOCKED FOR POC)
       const options: PublicKeyCredentialRequestOptionsJSON = {
         challenge: this.uint8ArrayToBase64Url(crypto.getRandomValues(new Uint8Array(32))),
-        rpId: window.location.hostname,
         userVerification: 'preferred',
         timeout: 60000,
       };
