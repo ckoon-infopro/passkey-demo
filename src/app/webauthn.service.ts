@@ -46,7 +46,7 @@ export class WebAuthnService {
         challenge: this.uint8ArrayToBase64Url(crypto.getRandomValues(new Uint8Array(32))),
         rp: {
           name: 'Gemini Passkey Demo',
-          id: window.location.hostname,
+          id: 'passkey-demo-hcs9.onrender.com', // primary site
         },
         user: {
           id: this.uint8ArrayToBase64Url(new TextEncoder().encode(username)),
@@ -93,6 +93,7 @@ export class WebAuthnService {
       // 1. Get authentication options from your backend (MOCKED FOR POC)
       const options: PublicKeyCredentialRequestOptionsJSON = {
         challenge: this.uint8ArrayToBase64Url(crypto.getRandomValues(new Uint8Array(32))),
+        rpId: 'passkey-demo-hcs9.onrender.com', // primary site
         userVerification: 'preferred',
         timeout: 60000,
       };
