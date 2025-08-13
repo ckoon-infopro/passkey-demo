@@ -29,6 +29,15 @@
     ],
     "target": {
       "namespace": "web",
+      "site": "https://passkey-demo-hcs9.onrender.com/"
+    }
+  },
+  {
+    "relation": [
+      "delegate_permission/common.get_login_creds"
+    ],
+    "target": {
+      "namespace": "web",
       "site": "https://passkey-demo-2.onrender.com/"
     }
   }
