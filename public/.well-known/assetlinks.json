@@ -22,23 +22,5 @@
         "44:99:6E:93:72:79:17:A8:6B:F3:DB:90:E5:4B:E3:BD:64:57:F4:0A:BA:94:49:22:34:D7:1B:4A:B5:6B:3E:0C"
       ]
     }
-  },
-  {
-    "relation": [
-      "delegate_permission/common.get_login_creds"
-    ],
-    "target": {
-      "namespace": "web",
-      "site": "https://passkey-demo-hcs9.onrender.com/"
-    }
-  },
-  {
-    "relation": [
-      "delegate_permission/common.get_login_creds"
-    ],
-    "target": {
-      "namespace": "web",
-      "site": "https://passkey-demo-2.onrender.com/"
-    }
   }
 ]
