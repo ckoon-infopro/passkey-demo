@@ -60,7 +60,7 @@ export class WebAuthnService {
         authenticatorSelection: {
           authenticatorAttachment: 'platform',
           requireResidentKey: true,
-          userVerification: 'preferred',
+          userVerification: 'required',
         },
         timeout: 60000,
         attestation: 'direct',
@@ -93,7 +93,7 @@ export class WebAuthnService {
       // 1. Get authentication options from your backend (MOCKED FOR POC)
       const options: PublicKeyCredentialRequestOptionsJSON = {
         challenge: this.uint8ArrayToBase64Url(crypto.getRandomValues(new Uint8Array(32))),
-        userVerification: 'preferred',
+        userVerification: 'required',
         timeout: 60000,
       };
       console.log('Mock Authentication Options:', options);
